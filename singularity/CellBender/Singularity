@@ -1,0 +1,25 @@
+BootStrap: docker
+From: continuumio/miniconda:latest
+IncludeCmd: yes
+
+%help
+
+%setup
+
+%files
+
+%labels
+
+%environment
+	export PICARD_JAR=$(find /opt/conda/share | grep picard.jar)
+
+%post
+	umask 0022
+	apt update
+	apt -y dist-upgrade
+	apt -y install build-essential git environment-modules wget
+	export PATH=/opt/conda/bin:$PATH
+	conda install -c anaconda pytables python=3.7
+    conda install pytorch torchvision -c pytorch
+    git clone https://github.com/broadinstitute/CellBender.git
+    pip install -e CellBender
